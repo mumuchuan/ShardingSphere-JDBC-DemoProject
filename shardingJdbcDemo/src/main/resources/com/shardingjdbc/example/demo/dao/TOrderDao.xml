@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shardingjdbc.example.demo.dao.TOrderDao">
+
+
+    <!--查询单个-->
+    <select id="queryById" resultType="com.shardingjdbc.example.demo.entity.TOrder">
+        select order_id as orderId,
+               user_id as userId,
+               status
+        from t_order
+        where order_id = #{orderId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAll" resultType="com.shardingjdbc.example.demo.entity.TOrder">
+        select order_id as orderId,
+               user_id as userId,
+               status
+        from t_order
+    </select>
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="orderId" useGeneratedKeys="true" parameterType="com.shardingjdbc.example.demo.entity.TOrder">
+        insert into t_order(user_id, status)
+        values (#{userId}, #{status})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_order
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+</mapper>
+

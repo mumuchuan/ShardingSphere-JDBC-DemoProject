@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shardingjdbc.example.demo.dao.TOrderItemDao">
+
+
+    <!--查询单个-->
+    <select id="queryById" resultType="com.shardingjdbc.example.demo.entity.TOrderItem">
+        select order_item_id,
+               order_id,
+               user_id,
+               status
+        from t_order_item_0
+        where order_item_id = #{orderItemId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultType="com.shardingjdbc.example.demo.entity.TOrderItem">
+        select order_item_id,
+               order_id,
+               user_id,
+               status
+        from t_order_item_0 limit #{offset}, #{limit}
+    </select>
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="orderItemId" useGeneratedKeys="true">
+        insert into t_order_item_0(order_id, user_id, status)
+        values (#{orderId}, #{userId}, #{status})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="orderItemId" useGeneratedKeys="true">
+        insert into t_order_item_0(order_id, user_id, status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.orderId}, #{entity.userId}, #{entity.status})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="orderItemId" useGeneratedKeys="true">
+        insert into t_order_item_0(order_id, user_id, status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.orderId}, #{entity.userId}, #{entity.status})
+        </foreach>
+        on duplicate key update
+        order_id = values(order_id) , user_id = values(user_id) , status = values(status)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_order_item_0
+        <set>
+            <if test="orderId != null">
+                order_id = #{orderId},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where order_item_id = #{orderItemId}
+    </update>
+
+</mapper>
+
